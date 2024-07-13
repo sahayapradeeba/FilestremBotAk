@@ -80,12 +80,14 @@ async def is_user_joined(bot, message: Message):
 async def gen_link(m: Message, _id, name: list):
     await verify_user(m, name)
     #
-    mediax = m.document or m.video or m.audio
-    if mediax: 
-        file_caption = f"{m.caption}" if m.caption else ""
+    if (m.document or m.video or m.audio): 
+        if m.caption:                        
+            file_caption = f"{m.caption}"                
+        else:
+            file_caption = ""
     file_captionx = file_caption.replace(".mkv", "")        
     file_info = await db.get_file(_id)
-    file_name = file_captionx
+    file_name = file_info[file_captionx]
     file_size = humanbytes(file_info['file_size'])
     mime_type = file_info['mime_type']
 
