@@ -7,9 +7,7 @@ from FileStream.utils.human_readable import humanbytes
 from FileStream.config import Telegram, Server
 from FileStream.bot import FileStream
 import asyncio
-from typing import (
-    Union
-)
+from typing import Union
 
 
 db = Database(Telegram.DATABASE_URL, Telegram.SESSION_NAME)
@@ -79,9 +77,15 @@ async def is_user_joined(bot, message: Message):
 
 #---------------------[ PRIVATE GEN LINK + CALLBACK ]---------------------#
 
-async def gen_link(_id):
+async def gen_link(m: Message, _id, name: list):
+    await verify_user(m, name)
+    #
+    mediax = m.document or m.video or m.audio
+    if mediax: 
+        file_caption = f"{m.caption}" if m.caption else ""
+    file_captionx = file_caption.replace(".mkv", "")        
     file_info = await db.get_file(_id)
-    file_name = file_info[None]
+    file_name = file_captionx
     file_size = humanbytes(file_info['file_size'])
     mime_type = file_info['mime_type']
 
@@ -111,9 +115,9 @@ async def gen_link(_id):
 
 #---------------------[ GEN STREAM LINKS FOR CHANNEL ]---------------------#
 
-async def gen_linkx(m:Message , _id, name: list):
+async def gen_linkx(m: Message, _id, name: list):
     file_info = await db.get_file(_id)
-    file_name = file_info['file_name']
+    file_name = file_info['file_caption']
     mime_type = file_info['mime_type']
     file_size = humanbytes(file_info['file_size'])
 
@@ -200,17 +204,17 @@ async def is_channel_exist(bot, message):
             f"**#NᴇᴡCʜᴀɴɴᴇʟ** \n**⬩ ᴄʜᴀᴛ ɴᴀᴍᴇ :** `{message.chat.title}`\n**⬩ ᴄʜᴀᴛ ɪᴅ :** `{message.chat.id}`\n**⬩ ᴛᴏᴛᴀʟ ᴍᴇᴍʙᴇʀs :** `{members}`"
         )
 
-async def verify_user(bot, message):
+async def verify_user(message, name):
     if not await is_user_authorized(message):
         return False
 
     if await is_user_banned(message):
         return False
 
-    await is_user_exist(bot, message)
+    await is_user_exist(FileStream, message)
 
     if Telegram.FORCE_SUB:
-        if not await is_user_joined(bot, message):
+        if not await is_user_joined(FileStream, message):
             return False
 
     return True
