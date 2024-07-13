@@ -79,9 +79,18 @@ async def is_user_joined(bot, message: Message):
 
 #---------------------[ PRIVATE GEN LINK + CALLBACK ]---------------------#
 
-async def gen_link(_id):
+async def gen_link(m:Message , _id, name: list):
+    await verify_user(name, m)
+    #
+    mediax = m.document or m.video or m.audio
+    if (m.document or m.video or m.audio): 
+        if m.caption:                        
+            file_caption = f"{m.caption}"                
+        else:
+            file_caption = ""
+    file_captionx = file_caption.replace(".mkv", "")        
     file_info = await db.get_file(_id)
-    file_name = file_info['caption']
+    file_name = file_info['file_captionx']
     file_size = humanbytes(file_info['file_size'])
     mime_type = file_info['mime_type']
 
@@ -113,7 +122,7 @@ async def gen_link(_id):
 
 async def gen_linkx(m:Message , _id, name: list):
     file_info = await db.get_file(_id)
-    file_name = file_info['caption']
+    file_name = file_info['file_caption']
     mime_type = file_info['mime_type']
     file_size = humanbytes(file_info['file_size'])
 
