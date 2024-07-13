@@ -15,7 +15,7 @@ async def get_user_preference(user_id):
     # Placeholder function to get user preference from the database
     # This should be replaced with actual logic to fetch user preference
     # Return True if user prefers direct media, False otherwise
-    return False
+    return True
 
 @FileStream.on_message(
     filters.private
