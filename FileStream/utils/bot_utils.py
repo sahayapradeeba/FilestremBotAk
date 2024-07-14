@@ -79,12 +79,11 @@ async def is_user_joined(bot, message: Message):
 
 #---------------------[ PRIVATE GEN LINK + CALLBACK ]---------------------#
 
-async def gen_link(m:Message , _id, name: list):
+async def gen_link(_id, previous_caption=None):
     file_info = await db.get_file(_id)
-    previous_caption = "" if not m.caption else m.caption.html  # Get the previous caption if available
     file_name = previous_caption if previous_caption else file_info['file_name']  # Use previous caption as file name if it exists
-    mime_type = file_info['mime_type']
     file_size = humanbytes(file_info['file_size'])
+    mime_type = file_info['mime_type']
 
     page_link = f"{Server.URL}watch/{_id}"
     stream_link = f"{Server.URL}dl/{_id}"
