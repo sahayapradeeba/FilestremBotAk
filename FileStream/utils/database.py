@@ -4,7 +4,6 @@ import motor.motor_asyncio
 from bson.objectid import ObjectId
 from bson.errors import InvalidId
 from FileStream.server.exceptions import FIleNotFound
-from FileStream.utils.translation import LANG, BUTTON
 
 class Database:
     def __init__(self, uri, database_name):
@@ -13,15 +12,13 @@ class Database:
         self.col = self.db.users
         self.black = self.db.blacklist
         self.file = self.db.file
-        self.chl = self.db.ChannelsList
 
 #---------------------[ NEW USER ]---------------------#
     def new_user(self, id):
         return dict(
             id=id,
             join_date=time.time(),
-            Links=0,
-            caption=LANG.STREAM_TEXT
+            Links=0
         )
 
 # ---------------------[ ADD USER ]---------------------#
@@ -135,16 +132,3 @@ class Database:
             await self.col.update_one({"id": id}, {"$inc": {"Links": -1}})
         elif operation == "+":
             await self.col.update_one({"id": id}, {"$inc": {"Links": 1}})
-
-    async def get_channel_details(self, user_id: int, chat_id: int):
-       return await self.chl.find_one({"user_id": int(user_id), "chat_id": int(chat_id)})
-    
-    async def get_channel_detail(self, chat_id: int):
-       return await self.chl.find_one({"chat_id": int(chat_id)})
-    
-    async def set_caption(self, id, caption):
-        await self.col.update_one({'id': id}, {'$set': {'caption': caption}})
-
-    async def get_caption(self, id):
-        user = await self.col.find_one({'id': int(id)})
-        return user.get('caption', None)    
