@@ -3,39 +3,19 @@ from FileStream.bot import FileStream, multi_clients
 from FileStream.utils.bot_utils import is_user_banned, is_user_exist, is_user_joined, gen_link, is_channel_banned, is_channel_exist, is_user_authorized
 from FileStream.utils.database import Database
 from FileStream.utils.file_properties import get_file_ids, get_file_info
-from FileStream.config import Telegram, Server
+from FileStream.config import Telegram
 from pyrogram import filters, Client
 from pyrogram.errors import FloodWait
 from pyrogram.types import Message, InlineKeyboardMarkup, InlineKeyboardButton
 from pyrogram.enums.parse_mode import ParseMode
-import logging
 
-# Initialize the database
 db = Database(Telegram.DATABASE_URL, Telegram.SESSION_NAME)
-
-# Setup logging
-logging.basicConfig(level=logging.INFO)
-logger = logging.getLogger(__name__)
 
 async def get_user_preference(user_id):
     # Placeholder function to get user preference from the database
-    # Replace with actual logic to fetch user preference
+    # This should be replaced with actual logic to fetch user preference
+    # Return True if user prefers direct media, False otherwise
     return True
-
-async def get_hash(message):
-    # Placeholder function to generate a hash for the message
-    # Replace with actual logic
-    return "dummy_hash"
-
-async def get_name(message):
-    # Placeholder function to get the file name
-    # Replace with actual logic
-    return "dummy_file_name"
-
-async def humanbytes(size):
-    # Placeholder function to convert size to human-readable format
-    # Replace with actual logic
-    return f"{size} bytes"
 
 @FileStream.on_message(
     filters.private
@@ -68,15 +48,21 @@ async def private_receive_handler(bot: Client, message: Message):
         user_preference = await get_user_preference(message.from_user.id)
 
         if user_preference:
-            media = message.document or message.video or message.audio or message.photo or message.animation or message.voice or message.video_note
-            if media:
-                await bot.send_cached_media(
-                    chat_id=message.from_user.id,
-                    file_id=media.file_id,
-                    caption=stream_text,
-                    parse_mode=ParseMode.HTML
-                )
+            # Send cached media directly to the user
+            await bot.send_cached_media(
+                chat_id=message.from_user.id,
+                file_id=message.document.file_id if message.document else
+                        message.video.file_id if message.video else
+                        message.audio.file_id if message.audio else
+                        message.photo.file_id if message.photo else
+                        message.animation.file_id if message.animation else
+                        message.voice.file_id if message.voice else
+                        message.video_note.file_id,
+                caption=stream_text,
+                parse_mode=ParseMode.HTML
+            )
         else:
+            # Send the link as the default behavior
             await message.reply_text(
                 text=stream_text,
                 parse_mode=ParseMode.HTML,
@@ -85,21 +71,11 @@ async def private_receive_handler(bot: Client, message: Message):
                 quote=True
             )
     except FloodWait as e:
-        logger.warning(f"Sleeping for {e.value}s due to FloodWait")
+        print(f"Sleeping for {str(e.value)}s")
         await asyncio.sleep(e.value)
-        await bot.send_message(
-            chat_id=Telegram.ULOG_CHANNEL,
-            text=f"Gᴏᴛ FʟᴏᴏᴅWᴀɪᴛ ᴏғ {e.value}s ғʀᴏᴍ [{message.from_user.first_name}](tg://user?id={message.from_user.id})\n\n**ᴜsᴇʀ ɪᴅ :** `{message.from_user.id}`",
-            disable_web_page_preview=True,
-            parse_mode=ParseMode.MARKDOWN
-        )
-    except Exception as e:
-        logger.error(f"An error occurred: {e}")
-        await bot.send_message(
-            chat_id=Telegram.ULOG_CHANNEL,
-            text=f"**#EʀʀᴏʀTʀᴀᴄᴋᴇʙᴀᴄᴋ:** `{e}`",
-            disable_web_page_preview=True
-        )
+        await bot.send_message(chat_id=Telegram.ULOG_CHANNEL,
+                               text=f"Gᴏᴛ FʟᴏᴏᴅWᴀɪᴛ ᴏғ {str(e.value)}s ғʀᴏᴍ [{message.from_user.first_name}](tg://user?id={message.from_user.id})\n\n**ᴜsᴇʀ ɪᴅ :** `{str(message.from_user.id)}`",
+                               disable_web_page_preview=True, parse_mode=ParseMode.MARKDOWN)
 
 @FileStream.on_message(
     filters.channel
@@ -114,57 +90,30 @@ async def private_receive_handler(bot: Client, message: Message):
         | filters.photo
     )
 )
-async def channel_receive_handler(bot: Client, msg: Message):
-    if await is_channel_banned(bot, msg):
+async def channel_receive_handler(bot: Client, message: Message):
+    if await is_channel_banned(bot, message):
         return
-    await is_channel_exist(bot, msg)
+    await is_channel_exist(bot, message)
 
     try:
-        file_caption = msg.caption if msg.caption else ""
-        
-        log_msg = await msg.forward(chat_id=Telegram.FLOG_CHANNEL)
-        online_link = f"{Server.URL}dl/{str(log_msg.id)}?hash={await get_hash(log_msg)}"
-        settings = await db.get_channel_detail(msg.chat.id)
-        
-        await log_msg.reply_text(
-            text=f"**Channel Name:** `{msg.chat.title}`\n**CHANNEL ID:** `{msg.chat.id}`\n**Rᴇǫᴜᴇsᴛ ᴜʀʟ:** {online_link}", 
-            quote=True
+        inserted_id = await db.add_file(get_file_info(message))
+        await get_file_ids(False, inserted_id, multi_clients, message)
+        reply_markup, stream_link = await gen_link(_id=inserted_id)
+        await bot.edit_message_reply_markup(
+            chat_id=message.chat.id,
+            message_id=message.id,
+            reply_markup=InlineKeyboardMarkup(
+                [[InlineKeyboardButton("Dᴏᴡɴʟᴏᴀᴅ ʟɪɴᴋ 📥",
+                                       url=f"https://t.me/{FileStream.username}?start=stream_{str(inserted_id)}")]])
         )
-        
-        await bot.edit_message_caption(
-                    chat_id=msg.chat.id,
-                    message_id=msg.id,
-                    caption=settings['settings']["caption"].format(file_name ='' if get_name(log_msg) is None else get_name(log_msg),
-                                             caption ='' if file_caption is None else file_caption, 
-                                             download_link ='' if online_link is None else online_link, 
-                                             stream_link ='' if online_link is None else online_link, 
-                                            ),
-                )
-        
-        await bot.edit_message_caption(
-            chat_id=msg.chat.id,
-            message_id=msg.id,
-            caption=format(
-                file_name='' if await get_name(log_msg) is None else await get_name(log_msg),
-                caption='' if file_caption is None else file_caption, 
-                file_size='' if await humanbytes(msg.document.file_size) is None else await humanbytes(msg.document.file_size),
-                download_link='' if online_link is None else online_link, 
-                stream_link='' if online_link is None else online_link
-            ),
-        )
+
     except FloodWait as w:
-        logger.warning(f"Sleeping for {w.x}s due to FloodWait")
+        print(f"Sleeping for {str(w.x)}s")
         await asyncio.sleep(w.x)
-        await bot.send_message(
-            chat_id=Telegram.ULOG_CHANNEL,
-            text=f"GOT FLOODWAIT OF {w.x}s FROM {msg.chat.title}\n\n**CHANNEL ID:** `{msg.chat.id}`",
-            disable_web_page_preview=True
-        )
+        await bot.send_message(chat_id=Telegram.ULOG_CHANNEL,
+                               text=f"ɢᴏᴛ ғʟᴏᴏᴅᴡᴀɪᴛ ᴏғ {str(w.x)}s ғʀᴏᴍ {message.chat.title}\n\n**ᴄʜᴀɴɴᴇʟ ɪᴅ :** `{str(message.chat.id)}`",
+                               disable_web_page_preview=True)
     except Exception as e:
-        logger.error(f"An error occurred: {e}")
-        await bot.send_message(
-            chat_id=Telegram.ULOG_CHANNEL,
-            text=f"**#ERROR_TRACKEBACK:** `{e}`",
-            disable_web_page_preview=True
-        )
-        logger.error(f"Can't edit broadcast message! Error: {e}")
+        await bot.send_message(chat_id=Telegram.ULOG_CHANNEL, text=f"**#EʀʀᴏʀTʀᴀᴄᴋᴇʙᴀᴄᴋ:** `{e}`",
+                               disable_web_page_preview=True)
+        print(f"Cᴀɴ'ᴛ Eᴅɪᴛ Bʀᴏᴀᴅᴄᴀsᴛ Mᴇssᴀɢᴇ!\nEʀʀᴏʀ:  **Gɪᴠᴇ ᴍᴇ ᴇᴅɪᴛ ᴘᴇʀᴍɪssɪᴏɴ ɪɴ ᴜᴘᴅᴀᴛᴇs ᴀɴᴅ ʙɪɴ Cʜᴀɴɴᴇʟ!{e}**")
