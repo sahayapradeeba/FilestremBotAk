@@ -4,6 +4,7 @@ import motor.motor_asyncio
 from bson.objectid import ObjectId
 from bson.errors import InvalidId
 from FileStream.server.exceptions import FIleNotFound
+from FileStream.utils.translation import LANG, BUTTON
 
 class Database:
     def __init__(self, uri, database_name):
@@ -19,7 +20,8 @@ class Database:
         return dict(
             id=id,
             join_date=time.time(),
-            Links=0
+            Links=0,
+            caption=LANG.STREAM_TEXT
         )
 
 # ---------------------[ ADD USER ]---------------------#
@@ -139,3 +141,10 @@ class Database:
     
     async def get_channel_detail(self, chat_id: int):
        return await self.chl.find_one({"chat_id": int(chat_id)})
+    
+    async def set_caption(self, id, caption):
+        await self.col.update_one({'id': id}, {'$set': {'caption': caption}})
+
+    async def get_caption(self, id):
+        user = await self.col.find_one({'id': int(id)})
+        return user.get('caption', None)    
