@@ -132,3 +132,9 @@ class Database:
             await self.col.update_one({"id": id}, {"$inc": {"Links": -1}})
         elif operation == "+":
             await self.col.update_one({"id": id}, {"$inc": {"Links": 1}})
+
+    async def get_channel_details(self, user_id: int, chat_id: int):
+       return await self.chl.find_one({"user_id": int(user_id), "chat_id": int(chat_id)})
+    
+    async def get_channel_detail(self, chat_id: int):
+       return await self.chl.find_one({"chat_id": int(chat_id)})
