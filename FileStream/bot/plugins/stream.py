@@ -1,4 +1,5 @@
 import asyncio
+import logging
 from FileStream.bot import FileStream, multi_clients
 from FileStream.utils.bot_utils import is_user_banned, is_user_exist, is_user_joined, gen_link, is_channel_banned, is_channel_exist, is_user_authorized
 from FileStream.utils.database import Database
@@ -8,7 +9,6 @@ from pyrogram import filters, Client
 from pyrogram.errors import FloodWait
 from pyrogram.types import Message, InlineKeyboardMarkup, InlineKeyboardButton
 from pyrogram.enums.parse_mode import ParseMode
-import logging
 
 # Initialize the database
 db = Database(Telegram.DATABASE_URL, Telegram.SESSION_NAME)
@@ -126,30 +126,23 @@ async def channel_receive_handler(bot: Client, msg: Message):
         online_link = f"{Server.URL}dl/{str(log_msg.id)}?hash={await get_hash(log_msg)}"
         settings = await db.get_channel_detail(msg.chat.id)
         
-        await log_msg.reply_text(
-            text=f"**Channel Name:** `{msg.chat.title}`\n**CHANNEL ID:** `{msg.chat.id}`\n**Rᴇǫᴜᴇsᴛ ᴜʀʟ:** {online_link}", 
-            quote=True
+        if not settings or 'settings' not in settings or 'caption' not in settings['settings']:
+            raise ValueError("Invalid settings or missing caption template.")
+
+        formatted_caption = settings['settings']["caption"].format(
+            file_name='' if await get_name(log_msg) is None else await get_name(log_msg),
+            caption='' if file_caption is None else file_caption, 
+            file_size='' if not msg.document else await humanbytes(msg.document.file_size),
+            download_link='' if online_link is None else online_link, 
+            stream_link='' if online_link is None else online_link
         )
-        
-        await bot.edit_message_reply_markup(
-            chat_id=msg.chat.id,
-            message_id=msg.id,
-            reply_markup=InlineKeyboardMarkup(
-                [[InlineKeyboardButton("Dᴏᴡɴʟᴏᴀᴅ ɴᴏᴡ 📥", url=online_link)]]
-            )
-        )
-        
+
         await bot.edit_message_caption(
             chat_id=msg.chat.id,
             message_id=msg.id,
-            caption=settings['settings']["caption"].format(
-                file_name='' if await get_name(log_msg) is None else await get_name(log_msg),
-                caption='' if file_caption is None else file_caption, 
-                file_size='' if await humanbytes(msg.document.file_size) is None else await humanbytes(msg.document.file_size),
-                download_link='' if online_link is None else online_link, 
-                stream_link='' if online_link is None else online_link
-            ),
+            caption=formatted_caption
         )
+        
     except FloodWait as w:
         logger.warning(f"Sleeping for {w.x}s due to FloodWait")
         await asyncio.sleep(w.x)
