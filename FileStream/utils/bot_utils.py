@@ -101,10 +101,10 @@ async def gen_link(_id):
     file_size = humanbytes(file_info['file_size'])
     mime_type = file_info['mime_type']
 
-    page_link = f"{Server.URL}watch/{_id}"
+    short_page = f"{Server.URL}watch/{_id}"
     stream_link = f"{Server.URL}dl/{_id}"
-    short_link = f"https://t.me/{FileStream.username}?start=file_{_id}"
-    file_link = get_short(short_link)
+    file_link = f"https://t.me/{FileStream.username}?start=file_{_id}"
+    page_link = get_short(short_page)
 
     if "video" in mime_type:
         stream_text = LANG.STREAM_TEXT.format(file_name, file_size, stream_link, page_link, file_link)
