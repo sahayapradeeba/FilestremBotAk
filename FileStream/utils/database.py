@@ -12,6 +12,7 @@ class Database:
         self.col = self.db.users
         self.black = self.db.blacklist
         self.file = self.db.file
+        self.chl = self.db.ChannelsList
 
 #---------------------[ NEW USER ]---------------------#
     def new_user(self, id):
