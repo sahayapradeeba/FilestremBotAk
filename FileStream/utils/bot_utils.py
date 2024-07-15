@@ -10,7 +10,23 @@ import asyncio
 from typing import (
     Union
 )
+import string
+import random
+import requests
 
+def generate_random_alphanumeric():
+    """Generate a random 8-letter alphanumeric string."""
+    characters = string.ascii_letters + string.digits
+    random_chars = ''.join(random.choice(characters) for _ in range(8))
+    return random_chars
+
+def get_short(url):
+    rget = requests.get(f"https://{Telegram.SHORTLINK_URL}/api?api={Telegram.SHORTLINK_API}&url={url}&alias={generate_random_alphanumeric()}")
+    rjson = rget.json()
+    if rjson["status"] == "success" or rget.status_code == 200:
+        return rjson["shortenedUrl"]
+    else:
+        return url
 
 db = Database(Telegram.DATABASE_URL, Telegram.SESSION_NAME)
 
@@ -79,18 +95,19 @@ async def is_user_joined(bot, message: Message):
 
 #---------------------[ PRIVATE GEN LINK + CALLBACK ]---------------------#
 
-async def gen_link(_id, previous_caption=None):
+async def gen_link(_id):
     file_info = await db.get_file(_id)
-    file_name = previous_caption if previous_caption else file_info['file_name']  # Use previous caption as file name if it exists
+    file_name = file_info['file_name']
     file_size = humanbytes(file_info['file_size'])
     mime_type = file_info['mime_type']
 
     page_link = f"{Server.URL}watch/{_id}"
     stream_link = f"{Server.URL}dl/{_id}"
-    file_link = f"https://t.me/{FileStream.username}?start=file_{_id}"
+    short_link = f"https://t.me/{FileStream.username}?start=file_{_id}"
+    file_link = get_short(short_link)
 
     if "video" in mime_type:
-        stream_text = LANG.STREAM_TEXT.format(file_name, file_size, page_link)
+        stream_text = LANG.STREAM_TEXT.format(file_name, file_size, stream_link, page_link, file_link)
         reply_markup = InlineKeyboardMarkup(
             [
                 [InlineKeyboardButton("sᴛʀᴇᴀᴍ", url=page_link), InlineKeyboardButton("ᴅᴏᴡɴʟᴏᴀᴅ", url=stream_link)],
@@ -99,7 +116,7 @@ async def gen_link(_id, previous_caption=None):
             ]
         )
     else:
-        stream_text = LANG.STREAM_TEXT_X.format(file_name, file_size, page_link)
+        stream_text = LANG.STREAM_TEXT_X.format(file_name, file_size, stream_link, file_link)
         reply_markup = InlineKeyboardMarkup(
             [
                 [InlineKeyboardButton("ᴅᴏᴡɴʟᴏᴀᴅ", url=stream_link)],
@@ -113,8 +130,7 @@ async def gen_link(_id, previous_caption=None):
 
 async def gen_linkx(m:Message , _id, name: list):
     file_info = await db.get_file(_id)
-    previous_caption = "" if not m.caption else m.caption.html  # Get the previous caption if available
-    file_name = previous_caption if previous_caption else file_info['file_name']  # Use previous caption as file name if it exists
+    file_name = file_info['file_name']
     mime_type = file_info['mime_type']
     file_size = humanbytes(file_info['file_size'])
 
@@ -123,14 +139,14 @@ async def gen_linkx(m:Message , _id, name: list):
     file_link = f"https://t.me/{FileStream.username}?start=file_{_id}"
 
     if "video" in mime_type:
-        stream_text= LANG.STREAM_TEXT_X.format(file_name, file_size, page_link)
+        stream_text= LANG.STREAM_TEXT_X.format(file_name, file_size, stream_link, page_link)
         reply_markup = InlineKeyboardMarkup(
             [
                 [InlineKeyboardButton("sᴛʀᴇᴀᴍ", url=page_link), InlineKeyboardButton("ᴅᴏᴡɴʟᴏᴀᴅ", url=stream_link)]
             ]
         )
     else:
-        stream_text= LANG.STREAM_TEXT_X.format(file_name, file_size, page_link)
+        stream_text= LANG.STREAM_TEXT_X.format(file_name, file_size, stream_link, file_link)
         reply_markup = InlineKeyboardMarkup(
             [
                 [InlineKeyboardButton("ᴅᴏᴡɴʟᴏᴀᴅ", url=stream_link)]
