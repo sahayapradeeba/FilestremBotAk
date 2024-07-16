@@ -1,171 +1,205 @@
-<!DOCTYPE html>
 <html lang="en">
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>FileStreamBot | {{file_name}}</title>
-    <link rel="icon" href="https://i.ibb.co/Hh4kF2b/icon.png" type="image/x-icon">
-    <link rel="shortcut icon" href="https://i.ibb.co/Hh4kF2b/icon.png" type="image/x-icon">
-    <link rel="stylesheet" href="https://unpkg.com/sheryjs/dist/Shery.css" />
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/proavipatil/data@main/fs/src/style.css">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/proavipatil/data@main/fs/src/plyr.css">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Josefin+Sans:wght@500;700&display=swap" rel="stylesheet">
-    <script src="https://cdn.tailwindcss.com"></script>
-
-</head>
-
-<body>
-    <nav>
-        <div class="nleft">
-            <a href="#">
-                <h3 id="heading" style="z-index: 100;" class="magnet title">FILE STREAM</h3>
+    <link type="text/css" rel="stylesheet" id="dark-mode-custom-link" />
+    <link type="text/css" rel="stylesheet" id="dark-mode-general-link" />
+    <style type="text/css" id="dark-mode-custom-style" lang="en"></style>
+    <style type="text/css" id="dark-mode-native-style" lang="en"></style>
+    <style type="text/css" id="dark-mode-native-sheet" lang="en"></style>
+    <head>
+      <link type="text/css" rel="stylesheet" id="dark-mode-custom-link" />
+      <link type="text/css" rel="stylesheet" id="dark-mode-general-link" />
+      <style type="text/css" id="dark-mode-custom-style" lang="en"></style>
+      <style type="text/css" id="dark-mode-native-style" lang="en"></style>
+      <style type="text/css" id="dark-mode-native-sheet" lang="en"></style>
+      <meta charset="UTF-8" />
+      <title> Watch {{file_name}} </title>
+      <meta name="description" content="stream your videos and Movie in high-quality 1080p Free and get tools to boost engagement all in one place." />
+      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" />
+      <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
+      <link href="https://fonts.googleapis.com/css?family=Roboto:400,700" rel="stylesheet" />
+      <link rel="stylesheet" href="https://cdn.plyr.io/3.6.12/plyr.css" />
+      <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/xdevxd/src@latest/sk/style.css">
+    </head>
+    <body data-new-gr-c-s-check-loaded="8.906.0" data-gr-ext-installed="">
+      <div id="sprite-plyr" hidden="">
+        <!--?xml version="1.0" encoding="UTF-8"?-->
+        <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+          <symbol id="plyr-airplay" viewBox="0 0 18 18">
+            <path d="M16 1H2a1 1 0 00-1 1v10a1 1 0 001 1h3v-2H3V3h12v8h-2v2h3a1 1 0 001-1V2a1 1 0 00-1-1z"></path>
+            <path d="M4 17h10l-5-6z"></path>
+          </symbol>
+          <symbol id="plyr-captions-off" viewBox="0 0 18 18">
+            <path d="M1 1c-.6 0-1 .4-1 1v11c0 .6.4 1 1 1h4.6l2.7 2.7c.2.2.4.3.7.3.3 0 .5-.1.7-.3l2.7-2.7H17c.6 0 1-.4 1-1V2c0-.6-.4-1-1-1H1zm4.52 10.15c1.99 0 3.01-1.32 3.28-2.41l-1.29-.39c-.19.66-.78 1.45-1.99 1.45-1.14 0-2.2-.83-2.2-2.34 0-1.61 1.12-2.37 2.18-2.37 1.23 0 1.78.75 1.95 1.43l1.3-.41C8.47 4.96 7.46 3.76 5.5 3.76c-1.9 0-3.61 1.44-3.61 3.7 0 2.26 1.65 3.69 3.63 3.69zm7.57 0c1.99 0 3.01-1.32 3.28-2.41l-1.29-.39c-.19.66-.78 1.45-1.99 1.45-1.14 0-2.2-.83-2.2-2.34 0-1.61 1.12-2.37 2.18-2.37 1.23 0 1.78.75 1.95 1.43l1.3-.41c-.28-1.15-1.29-2.35-3.25-2.35-1.9 0-3.61 1.44-3.61 3.7 0 2.26 1.65 3.69 3.63 3.69z" fill-rule="evenodd" fill-opacity=".5"></path>
+          </symbol>
+          <symbol id="plyr-captions-on" viewBox="0 0 18 18">
+            <path d="M1 1c-.6 0-1 .4-1 1v11c0 .6.4 1 1 1h4.6l2.7 2.7c.2.2.4.3.7.3.3 0 .5-.1.7-.3l2.7-2.7H17c.6 0 1-.4 1-1V2c0-.6-.4-1-1-1H1zm4.52 10.15c1.99 0 3.01-1.32 3.28-2.41l-1.29-.39c-.19.66-.78 1.45-1.99 1.45-1.14 0-2.2-.83-2.2-2.34 0-1.61 1.12-2.37 2.18-2.37 1.23 0 1.78.75 1.95 1.43l1.3-.41C8.47 4.96 7.46 3.76 5.5 3.76c-1.9 0-3.61 1.44-3.61 3.7 0 2.26 1.65 3.69 3.63 3.69zm7.57 0c1.99 0 3.01-1.32 3.28-2.41l-1.29-.39c-.19.66-.78 1.45-1.99 1.45-1.14 0-2.2-.83-2.2-2.34 0-1.61 1.12-2.37 2.18-2.37 1.23 0 1.78.75 1.95 1.43l1.3-.41c-.28-1.15-1.29-2.35-3.25-2.35-1.9 0-3.61 1.44-3.61 3.7 0 2.26 1.65 3.69 3.63 3.69z" fill-rule="evenodd"></path>
+          </symbol>
+          <symbol id="plyr-download" viewBox="0 0 18 18">
+            <path d="M9 13c.3 0 .5-.1.7-.3L15.4 7 14 5.6l-4 4V1H8v8.6l-4-4L2.6 7l5.7 5.7c.2.2.4.3.7.3zm-7 2h14v2H2z"></path>
+          </symbol>
+          <symbol id="plyr-enter-fullscreen" viewBox="0 0 18 18">
+            <path d="M10 3h3.6l-4 4L11 8.4l4-4V8h2V1h-7zM7 9.6l-4 4V10H1v7h7v-2H4.4l4-4z"></path>
+          </symbol>
+          <symbol id="plyr-exit-fullscreen" viewBox="0 0 18 18">
+            <path d="M1 12h3.6l-4 4L2 17.4l4-4V17h2v-7H1zM16 .6l-4 4V1h-2v7h7V6h-3.6l4-4z"></path>
+          </symbol>
+          <symbol id="plyr-fast-forward" viewBox="0 0 18 18">
+            <path d="M7.875 7.171L0 1v16l7.875-6.171V17L18 9 7.875 1z"></path>
+          </symbol>
+          <symbol id="plyr-logo-vimeo" viewBox="0 0 18 18">
+            <path d="M17 5.3c-.1 1.6-1.2 3.7-3.3 6.4-2.2 2.8-4 4.2-5.5 4.2-.9 0-1.7-.9-2.4-2.6C5 10.9 4.4 6 3 6c-.1 0-.5.3-1.2.8l-.8-1c.8-.7 3.5-3.4 4.7-3.5 1.2-.1 2 .7 2.3 2.5.3 2 .8 6.1 1.8 6.1.9 0 2.5-3.4 2.6-4 .1-.9-.3-1.9-2.3-1.1.8-2.6 2.3-3.8 4.5-3.8 1.7.1 2.5 1.2 2.4 3.3z"></path>
+          </symbol>
+          <symbol id="plyr-logo-youtube" viewBox="0 0 18 18">
+            <path d="M16.8 5.8c-.2-1.3-.8-2.2-2.2-2.4C12.4 3 9 3 9 3s-3.4 0-5.6.4C2 3.6 1.3 4.5 1.2 5.8 1 7.1 1 9 1 9s0 1.9.2 3.2c.2 1.3.8 2.2 2.2 2.4C5.6 15 9 15 9 15s3.4 0 5.6-.4c1.4-.3 2-1.1 2.2-2.4.2-1.3.2-3.2.2-3.2s0-1.9-.2-3.2zM7 12V6l5 3-5 3z"></path>
+          </symbol>
+          <symbol id="plyr-muted" viewBox="0 0 18 18">
+            <path d="M12.4 12.5l2.1-2.1 2.1 2.1 1.4-1.4L15.9 9 18 6.9l-1.4-1.4-2.1 2.1-2.1-2.1L11 6.9 13.1 9 11 11.1zM3.786 6.008H.714C.286 6.008 0 6.31 0 6.76v4.512c0 .452.286.752.714.752h3.072l4.071 3.858c.5.3 1.143 0 1.143-.602V2.752c0-.601-.643-.977-1.143-.601L3.786 6.008z"></path>
+          </symbol>
+          <symbol id="plyr-pause" viewBox="0 0 18 18">
+            <path d="M6 1H3c-.6 0-1 .4-1 1v14c0 .6.4 1 1 1h3c.6 0 1-.4 1-1V2c0-.6-.4-1-1-1zm6 0c-.6 0-1 .4-1 1v14c0 .6.4 1 1 1h3c.6 0 1-.4 1-1V2c0-.6-.4-1-1-1h-3z"></path>
+          </symbol>
+          <symbol id="plyr-pip" viewBox="0 0 18 18">
+            <path d="M13.293 3.293L7.022 9.564l1.414 1.414 6.271-6.271L17 7V1h-6z"></path>
+            <path d="M13 15H3V5h5V3H2a1 1 0 00-1 1v12a1 1 0 001 1h12a1 1 0 001-1v-6h-2v5z"></path>
+          </symbol>
+          <symbol id="plyr-play" viewBox="0 0 18 18">
+            <path d="M15.562 8.1L3.87.225c-.818-.562-1.87 0-1.87.9v15.75c0 .9 1.052 1.462 1.87.9L15.563 9.9c.584-.45.584-1.35 0-1.8z"></path>
+          </symbol>
+          <symbol id="plyr-restart" viewBox="0 0 18 18">
+            <path d="M9.7 1.2l.7 6.4 2.1-2.1c1.9 1.9 1.9 5.1 0 7-.9 1-2.2 1.5-3.5 1.5-1.3 0-2.6-.5-3.5-1.5-1.9-1.9-1.9-5.1 0-7 .6-.6 1.4-1.1 2.3-1.3l-.6-1.9C6 2.6 4.9 3.2 4 4.1 1.3 6.8 1.3 11.2 4 14c1.3 1.3 3.1 2 4.9 2 1.9 0 3.6-.7 4.9-2 2.7-2.7 2.7-7.1 0-9.9L16 1.9l-6.3-.7z"></path>
+          </symbol>
+          <symbol id="plyr-rewind" viewBox="0 0 18 18">
+            <path d="M10.125 1L0 9l10.125 8v-6.171L18 17V1l-7.875 6.171z"></path>
+          </symbol>
+          <symbol id="plyr-settings" viewBox="0 0 18 18">
+            <path d="M16.135 7.784a2 2 0 01-1.23-2.969c.322-.536.225-.998-.094-1.316l-.31-.31c-.318-.318-.78-.415-1.316-.094a2 2 0 01-2.969-1.23C10.065 1.258 9.669 1 9.219 1h-.438c-.45 0-.845.258-.997.865a2 2 0 01-2.969 1.23c-.536-.322-.999-.225-1.317.093l-.31.31c-.318.318-.415.781-.093 1.317a2 2 0 01-1.23 2.969C1.26 7.935 1 8.33 1 8.781v.438c0 .45.258.845.865.997a2 2 0 011.23 2.969c-.322.536-.225.998.094 1.316l.31.31c.319.319.782.415 1.316.094a2 2 0 012.969 1.23c.151.607.547.865.997.865h.438c.45 0 .845-.258.997-.865a2 2 0 012.969-1.23c.535.321.997.225 1.316-.094l.31-.31c.318-.318.415-.781.094-1.316a2 2 0 011.23-2.969c.607-.151.865-.547.865-.997v-.438c0-.451-.26-.846-.865-.997zM9 12a3 3 0 110-6 3 3 0 010 6z"></path>
+          </symbol>
+          <symbol id="plyr-volume" viewBox="0 0 18 18">
+            <path d="M15.6 3.3c-.4-.4-1-.4-1.4 0-.4.4-.4 1 0 1.4C15.4 5.9 16 7.4 16 9c0 1.6-.6 3.1-1.8 4.3-.4.4-.4 1 0 1.4.2.2.5.3.7.3.3 0 .5-.1.7-.3C17.1 13.2 18 11.2 18 9s-.9-4.2-2.4-5.7z"></path>
+            <path d="M11.282 5.282a.909.909 0 000 1.316c.735.735.995 1.458.995 2.402 0 .936-.425 1.917-.995 2.487a.909.909 0 000 1.316c.145.145.636.262 1.018.156a.725.725 0 00.298-.156C13.773 11.733 14.13 10.16 14.13 9c0-.17-.002-.34-.011-.51-.053-.992-.319-2.005-1.522-3.208a.909.909 0 00-1.316 0zm-7.496.726H.714C.286 6.008 0 6.31 0 6.76v4.512c0 .452.286.752.714.752h3.072l4.071 3.858c.5.3 1.143 0 1.143-.602V2.752c0-.601-.643-.977-1.143-.601L3.786 6.008z"></path>
+          </symbol>
+        </svg>
+      </div>
+  <div class="site-container">
+    <div class="site-pusher">
+      <header class="header">
+        <!-- <a href="#" class="header__iconx" id="header__iconx"></a> -->
+        <a href="https://telegram.me/KR_BOtz" class="header__logo"> TG File Stream • {{file_name}} - {{file_size}}</a> 
+      </header>
+      <div class="site-content">
+        <div class="containerbox">
+          <div style="margin-bottom: 20px; margin-top: 20px"></div>
+          <video id="myVideo" src="{{file_url}}" width="100%" height="auto"> Your browser does not support the video tag. </video>
+          <script src="https://cdn.plyr.io/3.6.12/plyr.js"></script>
+          <script>
+            const controls = ["rewind", "audio", "play", "fast-forward", "progress", "current-time", "duration", "captions", "settings", "pip", "airplay", "fullscreen", ];
+            document.addEventListener("DOMContentLoaded", () => {
+              const player = Plyr.setup("#myVideo", {
+                controls
+              });
+            });
+          </script>
+          <div style="margin-bottom: 16px; margin-top: 10px"></div>
+          <div class="con1">
+            <div id="link-content" class="link_content">
+              <div class="button-area-line">
+                <a id="demo2" onclick="showLinkModal('intent:{{file_url}}#Intent;package=com.mxtech.videoplayer.ad;end')" class="block">
+                  <i class="fa fa-play"></i> <b>MX  Player </b></a>
+                <a id="demo1" onclick="showLinkModal('vlc://{{file_url}}')" class="block">
+                  <i class="fa fa-play"></i> <b>VLC Player</b> </a>
+                <a id="demo2" onclick="showLinkModal('playit://playerv2/video?url={{file_url}}')" class="block">
+                  <i class="fa fa-play"></i> <b>Play it</b> </a>
+              </div>
+              <a id="demo3" onclick="showLinkModal('{{file_store_link}}')" class="block">
+                <i class="fa fa-link"></i> <b> Get Telegram File </b> </a>
+              <a id="demo3" onclick="showLinkModal('{{file_url}}')" class="block">
+                <i class="fa fa-download"></i> <b> Download File {{file_size}} </b> </a>
+              <a id="demo4" onclick="showLinkModal('https://telegram.me/KR_Botx')" class="block">
+                <i  class="fa fa-telegram"></i> <b> Join Updates Channel </b> </a>
+            </div>
+            <div id="link-modal" class="modal">
+              <div class="modal-content">
+                <span class="close" onclick="closeLinkModal()">×</span>
+                <p id="link"></p>
+                <div>
+                  <img src="https://cdn5.telesco.pe/file/hCNJSSfVjsUZtsge-pJVwBVT2vmrqLfn5pJ4dJWwtL88mPZMJNYZX77GRE8zGX8WqdOKopshT9TS-4lzd0hhcoS_r4y_mYN67FnGwFv43gxENEXhhtaQq5G_C2Tot-hRCJNNFLvrPtxdv6xFH7JXplxnNpxUvaf6zbeTIrhkJBtfp1R3FsbraKMGL6c0aK18S4TS78SfKhY4BXOKXGIN_7GF695chGfN5_dLmE46zG9jbXlSQNRpoXbPn785s9Txuk6qX9mWHlcKnc-IAAnfzdOpbDkHdsUy4Lz1kAJ2CzpYWFSk7tcDdy5zHfVkHdiChvD-JzDd6lut4Rnp8GR1cg.jpg">
+                </div>
+              </div>
+            </div>
+            <div>
+            <div class="textalert">
+              <h4 style="display: inline;">File Name: </h4>
+              <p style="display: inline; color: hsla(120, 2%, 17%, 0.784);" id="myDiv">{{file_name}}</p><br>
+              <h4 style="display: inline;">File Size: </h4>
+              <p style="display: inline; color: hsla(120, 2%, 17%, 0.784);">{{file_size}}</p><br>
+              <h4 style="display: inline;">Report ID: </h4>
+              <p style="display: inline; color: hsla(120, 2%, 17%, 0.784);" >{{file_unique_id}}</p><br>
+              <h4 style="display: inline;">File format: </h4>
+              <p style="display: inline; color: hsla(120, 2%, 17%, 0.784);">{{mime_type}}</p><br>
+            </div>
+            <br />
+            <b><u>Disclaimer</u></b>
+            <br/> This website only provides a service that helps you play your videos online without downloading. It does not offer storage or dissemination functions. You can report videos that contain issues such as copyright infringement, explicit content, violence, etc, <a href="https://telegram.me/" style="color: ff292d">
+              <b>Report</b>
             </a>
-        </div>
-        <div class="nryt">
-            <a class="home-btn magnet" href="#main" onclick="toggleWidthnav(this)">HOME</a>
-
-            <a href="#abtus" class="about-btn magnet" onclick="toggleWidthnav(this)">ABOUT</a>
-        </div>
-    </nav>
-    <center>
-        <div class="about-nav">
-            <a href="#abtus" class="wlcm magnet" onclick="toggleWidth(this)">WELCOME</a>
-            <a href="#channels" class="abt-chnl magnet" onclick="toggleWidth(this)">CHANNELS</a>
-            <a href="#contact" class="magnet contact-btn" onclick="toggleWidth(this)">CONTACT</a>
-        </div>
-    </center>
-
-    <div class="outer">
-        <div class="inner">
-            <div class="main" id="main">
-                <video id="player" class="player" src="{{file_url}}" type="video/mp4" playsinline controls
-                    width="100%"></video>
-                <div class="player"></div>
-                <div class="file-name">
-                    <h4 style="display: inline;">File Name: </h4>
-                    <p style="display: inline;" id="myDiv">{{file_name}}</p><br>
-                    <h4 style="display: inline;">File Size: </h4>
-                    <p style="display: inline;">{{file_size}}</p>
-                </div>
-                <div class="downloadBtn">
-                    <button class="magnet" onclick="streamDownload()">
-                        <img style="height: 30px;" src="https://i.ibb.co/RjzYttX/dl.png" alt="">download video
-                    </button>
-                    <button class="magnet" onclick="copyStreamLink()">
-                        <img src="https://i.ibb.co/CM4Y586/link.png" alt="Copy Link">copy link
-                    </button>
-                    <button class="magnet" onclick="vlc_player()">
-                        <img src="https://i.ibb.co/px6fQs1/vlc.png" alt="">watch in VLC PLAYER
-                    </button>
-                    <button class="magnet" onclick="mx_player()">
-                        <img src="https://i.ibb.co/41WvtQ3/mx.png" alt="">watch in MX PLAYER
-                    </button>
-                    <button class="magnet" onclick="n_player()">
-                        <img src="https://i.ibb.co/Hd2dS4t/nPlayer.png" alt="">watch in nPlayer
-                    </button>
-                </div>
-
+            <p></p>
+            <div class="alert">
+              <p id="C4">
+                <strong><u>Solution</u></strong> Video not playing ? possibly because your browser or the player doesn't support codec please download and watch. or use to stream in
+                <a href="#" style="color: #3520f4"><b>MX PLAYER</b>
+                </a> or <a href="#" style="color: #f78400">
+                  <b> VLC PLAYER </b> </a> or
+                <a href="#" style="color: #1c1c1c">
+                  <b> Playit PLAYER</b>
+                </a> for batter experiance.
+              </p>
             </div>
-            <div class="abt">
-                <div class="about">
-                    <div class="about-dets">
-
-                        <div class="abt-sec" id="abtus" style="padding: 160px 30px;">
-                            <h1 style="text-align: center;">WELCOME TO OUR <Span>FILE STREAM</Span> BOT</h1>
-                            <p style="text-align: center; line-height: 2;word-spacing: 2px;  letter-spacing: 0.8px;">
-                                This is a Telegram Bot to Stream <span>Movies</span> and <span>Series</span> directly on
-                                Telegram. You can also
-                                <span>download</span> them if you want. This bot is developed by <a
-                                    href="https://github.com/AviPatilPro"><span style="font-weight: 700;">Avi</span></a>
-                                <br><br>If you like this bot, then don't
-                                forget to share it with your friends and family.
-                            </p>
-                        </div>
-
-                        <div class="abt-sec" id="channels">
-                            <h1>JOIN OUR <span>TELEGRAM</span> CHANNELS</h1>
-                            <div class="links chnl-link">
-                                <a class="magnet" href="https://t.me/CheapieDeals">
-                                    <button>CHEAP DEALS</button>
-                                </a>
-                                <a class="magnet" href="https://t.me/FilmyPixel">
-                                    <button>FILMYPIXEL</button>
-                                </a>
-                                <a class="magnet" href="https://t.me/PostersZone">
-                                    <button>POSTERS ZONE</button>
-                                </a>
-                                <a class="magnet" href="https://t.me/EpitomeQuality">
-                                    <button>EPITOME QUALITY</button>
-                                </a>
-                            </div>
-                        </div>
-
-                        <div class="abt-sec" id="contact">
-                            <p style="text-align: center;">Report Bugs and Contact us on Telegram Below</p>
-                            <div class="links contact">
-                                <a href="https://t.me/AvishkarPatil">
-                                    <button>CONTACT</button>
-                                </a>
-                            </div>
-                        </div>
-
-                    </div>
-                </div>
-            </div>
+          </div>
+          <!-- SHORT URL Download -->
         </div>
-        <footer>
-            <center>
-
-                <div class="movie-cont">
-                    <div class="movieSug">
-                        <div class="movieDets">
-
-                        </div>
-                        <div class="movieimg">
-                            <img src="">
-                        </div>
-                    </div>
-                    <div class="low-width-movie-dets">
-                        <div class="movieStsBar">
-                            <div class="movieDets-mini">
-
-                            </div>
-                        </div>
-                    </div>
-                    <button class="ranMovBtn" onclick="getDets()">Get More Movies Suggestion</button>
-                </div>
-
-            </center>
-
-            <center>
-                <div class="copyright">
-                    <h5 class="text-center">Copyright © 2024 <a href="https://github.com/AviPatilPro"><span
-                                style="font-weight: 700;">Avishkar Patil</span></a>. All
-                        Rights Reserved.</h5>
-                </div>
-            </center>
-        </footer>
+        <!-- END container -->
+      </div>
+      <!-- END site-content -->
+      <div class="site-cache" id="site-cache"></div>
     </div>
-</body>
+    <!-- END site-pusher -->
+  </div>
+  <!-- END site-container -->
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+  <script>
+    function showLinkModal(link) {
+      // var modal = document.getElementById("link-modal");
+      // var linkElem = document.getElementById("link");
+      //       linkElem.innerHTML = "";
+      // modal.style.display = "block";
+      window.location.href = link;
+    }
+  
+    function closeLinkModal() {
+      var modal = document.getElementById("link-modal");
+      modal.style.display = "none";
+    }
+  </script>
+  <!--  -->
+  <script>
+    document.addEventListener('contextmenu', function (e) {
+        e.preventDefault();
+    });
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/0.155.0/three.min.js"></script>
-<script src="https://cdn.jsdelivr.net/gh/automat/controlkit.js@master/bin/controlKit.min.js"></script>
-<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/sheryjs/dist/Shery.js"></script>
-<script>
-    document.addEventListener("DOMContentLoaded", function () {
-        const uncopyableElement = document.querySelector(".uncopyable");
-
-        uncopyableElement.addEventListener("selectstart", function (event) {
-            event.preventDefault();
-        });
+    document.addEventListener('keydown', function (e) {
+        if (
+            e.key === 'F12' ||
+            (e.ctrlKey && e.shiftKey && e.key === 'I') ||
+            (e.ctrlKey && e.key === 'u') ||
+            e.ctrlKey ||
+            e.shiftKey ||
+            e.altKey
+        ) {
+            e.preventDefault();
+        }
     });
 </script>
-<script src="https://cdn.plyr.io/3.6.9/plyr.js"></script>
-<script src="https://proavipatil.github.io/data/fs/src/script.js"></script>
-
-</html>
+  </body>
+  <grammarly-desktop-integration data-grammarly-shadow-root="true"></grammarly-desktop-integration>
+  </html>
+  
+  
