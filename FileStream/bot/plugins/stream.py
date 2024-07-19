@@ -98,14 +98,19 @@ async def channel_receive_handler(bot: Client, message: Message):
     try:
         inserted_id = await db.add_file(get_file_info(message))
         await get_file_ids(False, inserted_id, multi_clients, message)
-        reply_markup, stream_link = await gen_link(_id=inserted_id)
+        reply_markup, stream_text = await gen_link(_id=inserted_id)
         await bot.edit_message_reply_markup(
-            chat_id=message.chat.id,
-            message_id=message.id,
-            reply_markup=InlineKeyboardMarkup(
-                [[InlineKeyboardButton("Dᴏᴡɴʟᴏᴀᴅ ʟɪɴᴋ 📥",
-                                       url=f"https://t.me/{FileStream.username}?start=stream_{str(inserted_id)}")]])
-        )
+            chat_id=message.from_user.id,
+                file_id=message.document.file_id if message.document else
+                        message.video.file_id if message.video else
+                        message.audio.file_id if message.audio else
+                        message.photo.file_id if message.photo else
+                        message.animation.file_id if message.animation else
+                        message.voice.file_id if message.voice else
+                        message.video_note.file_id,
+                caption=stream_text,
+                parse_mode=ParseMode.HTML
+            )
 
     except FloodWait as w:
         print(f"Sleeping for {str(w.x)}s")
