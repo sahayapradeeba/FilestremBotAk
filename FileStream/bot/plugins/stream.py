@@ -99,7 +99,7 @@ async def channel_receive_handler(bot: Client, message: Message):
         inserted_id = await db.add_file(get_file_info(message))
         await get_file_ids(False, inserted_id, multi_clients, message)
         reply_markup, stream_text = await gen_link(_id=inserted_id)
-        await bot.edit_message_reply_markup(
+        await bot.edit_message_caption(
             chat_id=message.from_user.id,
                 file_id=message.document.file_id if message.document else
                         message.video.file_id if message.video else
