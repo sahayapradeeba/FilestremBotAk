@@ -39,10 +39,10 @@ class Server:
     if 'DYNO' in environ:
         ON_HEROKU = True
         APP_NAME = str(getenv('APP_NAME', "mrak-2a7526a285ee")) #dont need to fill anything here
-    
+        FQDN = str(env.get("FQDN", "https://mrak-streambot.onrender.com"))
     else:
         ON_HEROKU = False
-    FQDN = str(getenv('FQDN', 'BIND_ADRESS:PORT')) if not ON_HEROKU or getenv('FQDN', '') else APP_NAME+'.herokuapp.com'
+    FQDN = str(env.get("FQDN", "https://mrak-streambot.onrender.com"))
     HAS_SSL=bool(getenv('HAS_SSL',True))
     if HAS_SSL:
         URL = "https://{}/".format(FQDN)
