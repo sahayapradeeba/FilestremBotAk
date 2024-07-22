@@ -39,7 +39,7 @@ class Server:
     if 'DYNO' in environ:
         ON_HEROKU = True
         APP_NAME = str(getenv('APP_NAME', "mrak-2a7526a285ee")) #dont need to fill anything here
-        FQDN = str(env.get("FQDN", "https://mrak-streambot.onrender.com"))
+        FQDN = str(env.get("FQDN", "https://mrak-utcj.onrender.com"))
     else:
         ON_HEROKU = False
     FQDN = str(env.get("FQDN", "https://mrak-streambot.onrender.com"))
