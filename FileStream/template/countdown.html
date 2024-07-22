@@ -37,7 +37,8 @@
             countdownElement.textContent = countdown;
             if (countdown <= 0) {
                 clearInterval(interval);
-                window.location.href = 'YOUR_DOWNLOAD_URL';  // Replace with the actual download URL
+                const downloadUrl = localStorage.getItem('downloadUrl');
+                window.location.href = downloadUrl;  // Start the download
             }
         }, 1000);
     </script>
